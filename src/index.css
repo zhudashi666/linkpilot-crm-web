@@ -1,0 +1,296 @@
+@import './fonts.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 与 AI 客服前端（Signal Light）保持一致：
+ * 冷调浅灰画布 + 纯白面板 + 墨黑主操作；品牌绿只表达「在线 / AI 托管 / 选中 / 成功」。
+ * 蓝 = 信息与算力，紫 = AI 生成内容，琥珀 = 待处理，红 = 离线 / 失败 / 危险。 */
+:root {
+  color-scheme: light;
+  --c-bg: 243 245 248;
+  --c-card: 255 255 255;
+  --c-card2: 246 247 250;
+  --c-border: 230 232 236;
+  --c-divider: 238 240 243;
+  --c-text: 20 22 31;
+  --c-muted: 100 105 120;
+  --c-line: 22 192 91;
+  --c-line-dark: 232 248 238;
+  --c-line-text: 14 154 72;
+  --c-line-strong: 14 154 72;
+  --c-danger: 229 72 77;
+  --c-danger-bg: 253 236 236;
+  --c-info: 14 165 233;
+  --c-warn: 217 119 6;
+  --c-warn-bg: 254 243 226;
+
+  --chat-canvas-bg: #f3f5f8;
+  --chat-customer-bg: #ffffff;
+  --chat-customer-border: #e6e8ec;
+  --chat-customer-text: #14161f;
+  --chat-agent-bg: #e8f8ee;
+  --chat-agent-border: #bfe9d0;
+  --chat-agent-text: #163823;
+  --chat-meta-text: #8a8f9c;
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    @apply bg-bg font-sans text-sm text-text antialiased;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    font-variant-numeric: tabular-nums;
+  }
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.01em;
+  }
+  ::selection {
+    background: rgb(var(--c-line) / 0.22);
+  }
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-line) / 0.6);
+    outline-offset: 2px;
+  }
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-2xl border border-border bg-card shadow-card;
+  }
+  .panel {
+    @apply rounded-2xl border border-border bg-card shadow-raised;
+  }
+  .card-hover {
+    @apply cursor-pointer transition-[border-color,box-shadow,transform] duration-150 hover:-translate-y-px hover:border-line/40 hover:shadow-raised;
+  }
+  .card-header {
+    @apply flex items-center gap-3 border-b border-divider px-5 py-4;
+  }
+  .card-body {
+    @apply p-5;
+  }
+
+  .btn {
+    @apply inline-flex min-h-9 items-center justify-center gap-2 whitespace-nowrap rounded-[10px] px-3.5 py-2 text-sm font-semibold transition-[color,background-color,border-color,box-shadow,transform] duration-150 active:translate-y-px disabled:cursor-not-allowed disabled:opacity-40 disabled:active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-line/35;
+  }
+  .btn-primary {
+    @apply btn bg-text text-white shadow-glow hover:bg-text/90;
+  }
+  .btn-ghost {
+    @apply btn border border-border bg-card text-text shadow-card hover:border-muted/30 hover:bg-card2;
+  }
+  .btn-danger {
+    @apply btn border border-danger/25 bg-danger-bg text-danger hover:bg-danger/15;
+  }
+
+  .input {
+    @apply h-9 w-full rounded-[10px] border border-border bg-card px-3 text-sm text-text outline-none transition-[border-color,box-shadow,background-color] placeholder:text-muted/60 hover:border-muted/40 focus:border-line focus:ring-[3px] focus:ring-line/20;
+  }
+  textarea.input {
+    @apply h-auto py-2.5;
+  }
+  .textarea {
+    @apply w-full rounded-[10px] border border-border bg-card px-3 py-2.5 text-sm text-text outline-none transition-[border-color,box-shadow] placeholder:text-muted/60 hover:border-muted/40 focus:border-line focus:ring-[3px] focus:ring-line/20;
+  }
+  .select {
+    @apply rounded-[10px] border border-border bg-card px-3 py-2 text-sm text-text outline-none transition-[border-color,box-shadow] hover:border-muted/40 focus:border-line focus:ring-[3px] focus:ring-line/20;
+  }
+  .label {
+    @apply mb-1.5 block text-sm text-muted;
+  }
+
+  .th {
+    @apply whitespace-nowrap border-b border-border bg-card2 px-5 py-3 text-left text-[11.5px] font-semibold tracking-[0.02em] text-muted;
+  }
+  .td {
+    @apply px-5 py-3.5 align-middle leading-5;
+  }
+  .data-table {
+    @apply w-full border-collapse text-sm;
+  }
+  :where(.data-table) th {
+    @apply whitespace-nowrap border-b border-border bg-card2 px-5 py-3 text-left text-[11.5px] font-semibold tracking-[0.02em] text-muted;
+  }
+  :where(.data-table) td {
+    @apply border-b border-divider px-5 py-3.5 align-middle leading-5;
+  }
+  .data-table tbody tr {
+    @apply transition-colors;
+  }
+  .data-table tbody tr:last-child td {
+    @apply border-b-0;
+  }
+  .data-table tbody tr:hover {
+    @apply bg-card2/70;
+  }
+
+  .kpi-card {
+    @apply min-w-[96px] rounded-2xl border border-border bg-card px-4 py-3.5 shadow-card transition-[border-color,box-shadow] duration-150 hover:border-line/20 hover:shadow-raised;
+  }
+  .kpi-icon {
+    @apply flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-card2 text-muted;
+  }
+  .kpi-label {
+    @apply mb-1 text-[11px] font-medium text-muted;
+  }
+  .kpi-value {
+    @apply text-xl font-bold leading-tight tracking-tight text-text tabular-nums;
+  }
+
+  /* 侧栏：白底、墨黑胶囊当前项、绿色图标 */
+  .nav-link {
+    @apply relative flex items-center gap-2.5 rounded-[10px] px-2.5 py-2 text-[13px] font-medium text-muted transition-colors duration-150 hover:bg-card2 hover:text-text;
+  }
+  .nav-link > svg {
+    @apply shrink-0 text-black/35 transition-transform duration-150;
+  }
+  .nav-link:hover > svg {
+    @apply scale-110;
+  }
+  .nav-link-active,
+  .nav-link-active:hover {
+    @apply bg-text text-white;
+    box-shadow: 0 8px 18px rgb(var(--c-text) / 0.18);
+  }
+  .nav-link-active > svg {
+    color: #3ddc84;
+  }
+  .nav-group {
+    @apply px-2.5 pb-1.5 pt-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted/60;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-2 py-0.5 text-xs font-semibold ring-1 ring-inset ring-transparent;
+  }
+  .pill-on {
+    @apply pill bg-line-dark text-line-text;
+  }
+  .pill-off {
+    @apply pill bg-danger-bg text-danger;
+  }
+  .pill-warn {
+    @apply pill bg-warn-bg text-warn;
+  }
+  .pill-info {
+    @apply pill bg-info/10 text-[#0284C7];
+  }
+  .pill-muted {
+    @apply pill bg-card2 text-muted ring-border;
+  }
+  .pill-ai {
+    @apply pill bg-ai-bg text-ai-text;
+  }
+
+  .ai-surface {
+    @apply relative overflow-hidden border border-border;
+    background:
+      radial-gradient(120% 140% at 0% 0%, rgb(var(--c-line) / 0.18), transparent 55%),
+      radial-gradient(120% 140% at 100% 0%, rgb(var(--c-info) / 0.14), transparent 55%),
+      #ffffff;
+  }
+  .aurora {
+    background:
+      radial-gradient(110% 130% at 0% 0%, rgb(var(--c-line) / 0.22), transparent 58%),
+      radial-gradient(90% 120% at 100% 100%, rgb(var(--c-info) / 0.16), transparent 60%),
+      radial-gradient(60% 80% at 80% 0%, rgb(124 92 255 / 0.1), transparent 60%),
+      #ffffff;
+  }
+  .num-hero {
+    @apply text-3xl font-bold leading-none tracking-tight text-text tabular-nums;
+  }
+
+  /* 内容区：顶部一层极浅的绿 / 蓝光晕 + 28px 网格 */
+  .client-content {
+    background:
+      radial-gradient(720px 240px at 20% 0%, rgb(var(--c-line) / 0.1), transparent 70%),
+      radial-gradient(620px 220px at 92% 0%, rgb(var(--c-info) / 0.08), transparent 70%),
+      linear-gradient(to right, rgb(var(--c-text) / 0.028) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(var(--c-text) / 0.028) 1px, transparent 1px),
+      rgb(var(--c-bg));
+    background-size: auto, auto, 28px 28px, 28px 28px, auto;
+  }
+  .client-topbar {
+    background: rgb(255 255 255 / 0.78);
+    backdrop-filter: blur(10px);
+  }
+
+  .chat-canvas {
+    background: var(--chat-canvas-bg);
+  }
+  .msg-bubble {
+    width: fit-content;
+    max-width: min(680px, 100%);
+    min-width: 48px;
+    padding: 11px 15px;
+    font-size: 14px;
+    line-height: 1.6;
+    word-break: break-word;
+    transition: box-shadow 0.15s ease;
+  }
+  .msg-bubble--customer {
+    background: var(--chat-customer-bg);
+    border: 1px solid var(--chat-customer-border);
+    color: var(--chat-customer-text);
+    border-radius: 14px 14px 14px 4px;
+    box-shadow: 0 1px 2px rgba(20, 22, 31, 0.04), 0 4px 12px rgba(20, 22, 31, 0.04);
+  }
+  .msg-bubble--agent {
+    background: var(--chat-agent-bg);
+    border: 1px solid var(--chat-agent-border);
+    color: var(--chat-agent-text);
+    border-radius: 14px 14px 4px 14px;
+    box-shadow: 0 1px 2px rgba(20, 22, 31, 0.04), 0 4px 12px rgba(22, 192, 91, 0.06);
+  }
+  .msg-bubble:hover {
+    box-shadow: 0 2px 4px rgba(20, 22, 31, 0.06), 0 6px 16px rgba(20, 22, 31, 0.06);
+  }
+  .msg-meta {
+    font-size: 12px;
+    line-height: 18px;
+    color: var(--chat-meta-text);
+  }
+
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(var(--c-border)) transparent;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--c-border));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--c-muted) / 0.5);
+  background-clip: padding-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
